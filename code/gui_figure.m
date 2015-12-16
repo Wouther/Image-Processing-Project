@@ -22,7 +22,7 @@ function varargout = gui_figure(varargin)
 
 % Edit the above text to modify the response to help gui_figure
 
-% Last Modified by GUIDE v2.5 16-Dec-2015 10:12:37
+% Last Modified by GUIDE v2.5 16-Dec-2015 13:57:32
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -73,13 +73,15 @@ function varargout = gui_figure_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 
-% --- Executes on button press in button_import.
-function button_import_Callback(hObject, eventdata, handles)
-    disp('Import button clicked'); %temporary
-    %TODO
+% --- Executes on button press in button_load.
+function button_load_Callback(hObject, eventdata, handles)
+    global processing;
+    
+    processing.load_file();
 
-% --- Executes on button press in button_startstop.
-function button_startstop_Callback(hObject, eventdata, handles)
+    
+% --- Executes on button press in button_start.
+function button_start_Callback(hObject, eventdata, handles)
     global processing;
     
     processing.start();
