@@ -75,10 +75,10 @@ varargout{1} = handles.output;
 
 % --- Executes on button press in button_load.
 function button_load_Callback(hObject, eventdata, handles)
-    global processing;
+    global gui;
     
-    processing.load_file();
-
+    gui.load_file();
+    
     
 % --- Executes on button press in button_start.
 function button_start_Callback(hObject, eventdata, handles)

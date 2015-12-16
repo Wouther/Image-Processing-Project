@@ -16,8 +16,7 @@ clearvars gui processing;
 global gui processing;
 
 %Initialise
-gui        = gui_class();
-processing = processing_class();
+gui = gui_class();
 
 %Add all parent folders to path
 %Makes functions/classes accessible to scripts in folders.

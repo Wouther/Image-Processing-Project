@@ -23,10 +23,53 @@ classdef gui_class < handle
             set(self.fig, 'CloseRequestFcn', @self.callback_close);
         end
         
+        %Load a file. Optionally accepts a (path to a) file as an argument,
+        % otherwise displays system selection dialogue.
+        function load_file(self, varargin)
+            global processing;
+            
+            %Select file
+            if nargin == 1 %no argument passed
+                [fname, ffolder] = uigetfile('../resources/*.avi');
+                if fname == false %dialogue was dismissed
+                    return;
+                end
+                fpath = [ffolder fname];
+            else
+                fpath = varargin{1};
+            end
+            
+            %Check existance
+            if exist(fpath, 'file') ~= 2
+                fprintf('Error: file "%s" does not exist.\n', fpath);
+                return;
+            end
+            
+            %Check if format supported
+            [~, fname, fext] = fileparts(fpath);
+            fext = fext(2:end); %remove leading period
+            supported_ext = VideoReader.getFileFormats();
+            if ~any(ismember({supported_ext.Extension}, fext))
+                fprintf('Error: VideoReader can''t read .%s files on this system.\n', fext);
+                return;
+            end
+            
+            %File accepted, so delete old processing and gui data...
+            if exist('processing', 'var')
+                delete(processing);
+            end
+            self.clean();
+            
+            % ...then load new file and update gui
+            self.update_textfield('text_file', [fname '.' fext]);
+            processing = processing_class(fpath);
+        end
+        
         %Cleans gui as preparation for new video file. Erases image,
         % deletes results in table, etc.
         function clean(self)
             self.handle.table_results.Data = {}; %empty table
+            set(self.handle.button_start, 'Enable', 'off'); %disable start button
             %TODO: clean the rest
         end
         
@@ -42,10 +85,10 @@ classdef gui_class < handle
             set(h, 'String', text);
         end
         
-        function update_button_start(self)
-            global processing;
-            
-            if processing.status == 0 %not currently processing
+        %Disables the start button if currently processing, enables
+        % otherwise. First argument is processing status.
+        function update_button_start(self, status)
+            if status == 0 %not currently processing
                 set(self.handle.button_start, 'Enable', 'on');
             else %currently processing already
                 set(self.handle.button_start, 'Enable', 'off');

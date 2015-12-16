@@ -11,11 +11,11 @@ classdef processing_class < handle
     methods
         
         %Constructor
-        function self = processing_class()
+        function self = processing_class(fpath)
             %Initialise
-            self.status  = 0;
-            self.file    = '';
             self.results = {};
+            self.set_status(0);
+            self.load_file(fpath);
         end
         
         function start(self)
@@ -37,44 +37,10 @@ classdef processing_class < handle
             gui.update_table_results();
         end
         
-        %Load a file. Optionally accepts a (path to a) file as an argument,
-        % otherwise displays system selection dialogue.
-        function load_file(self, varargin)
-            global gui;
-            
-            %Select file
-            if nargin == 1 %no argument passed
-                [fname, ffolder] = uigetfile('../resources/*.avi');
-                if fname == false %dialogue was dismissed
-                    return;
-                end
-                fpath = [ffolder fname];
-            else
-                fpath = varargin{1};
-            end
-            
-            %Check existance
-            if exist(fpath, 'file') ~= 2
-                fprintf('Error: file "%s" does not exist.\n', fpath);
-                return;
-            end
-            
-            %Check if format supported
-            [~, fname, fext] = fileparts(fpath);
-            fext = fext(2:end); %remove leading period
-            supported_ext = VideoReader.getFileFormats();
-            if ~any(ismember({supported_ext.Extension}, fext))
-                fprintf('Error: VideoReader can''t read .%s files on this system.\n', fext);
-                return;
-            end
-            
-            %File accepted: store it
+        %Load file for processing. Error checking (file existance, etc.)
+        % already done in gui_class.
+        function load_file(self, fpath)
             self.file.path = fpath;
-
-            %Update gui
-            self.set_status(0);
-            gui.clean();
-            gui.update_textfield('text_file', [fname fext]);
             
             %TODO: load raw file in matlab, ready for processing
         end
@@ -84,9 +50,9 @@ classdef processing_class < handle
             
             %Update value
             self.status = value;
-
+            
             %Update gui
-            gui.update_button_start();
+            gui.update_button_start(self.status);
         end
         
     end
