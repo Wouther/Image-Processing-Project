@@ -1,4 +1,5 @@
 %Handles all GUI events, callbacks, etc.
+%Uses processing object.
 classdef gui_class < handle
 
     properties
@@ -63,6 +64,30 @@ classdef gui_class < handle
             % ...then load new file and update gui
             self.update_textfield('text_file', [fname '.' fext]);
             processing = processing_class(fpath);
+        end
+        
+        %Start processing
+        %TODO: fix this function! It currently reloads all files when
+        % starting (silly when e.g. a new file that hasn't ran yet is loaded
+        % again for no reason), or at the wrong times... Somehow detect whether
+        % it has ran before and use that?
+        function start(self)
+            global processing;
+            
+            %(Re)load file
+            if exist('processing', 'var')
+                if exist('processing.file', 'var') && ~isempty(processing.file.path)
+                    %If file already loaded, reload the current file (this also cleans up)
+                    fpath = processing.file.path;
+                    self.load_file(fpath);
+                elseif exist('processing', 'var') && isempty(processing.results)
+                end
+            else %not ran yet
+                self.load_file();
+            end
+            
+            %Start processing
+            processing.start();
         end
         
         %Cleans gui as preparation for new video file. Erases image,

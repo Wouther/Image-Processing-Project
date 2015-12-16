@@ -1,4 +1,4 @@
-%Holds data concerning processing status, etc.
+%Processes data and stores results, etc.
 %Uses gui object.
 classdef processing_class < handle
 

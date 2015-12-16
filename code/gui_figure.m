@@ -82,7 +82,7 @@ function button_load_Callback(hObject, eventdata, handles)
     
 % --- Executes on button press in button_start.
 function button_start_Callback(hObject, eventdata, handles)
-    global processing;
+    global gui;
     
-    processing.start();
+    gui.start();
     
