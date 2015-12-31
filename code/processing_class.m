@@ -4,8 +4,11 @@ classdef processing_class < handle
 
     properties
         status; %0 if not processing
-        file; %File being processed. Structure with fields 'path' and 'raw'.
+        file; %File being processed. Structure with field 'path'.
         results; %Cell array with rows {'license plate', frame nr, timestamp}
+        vid; %VideoReader object of loaded file
+        frame; %Last video frame processed. Structure with fields 'image',
+        % 'nr' and 'timestamp'
     end
     
     methods
@@ -16,16 +19,34 @@ classdef processing_class < handle
             self.results = {};
             self.set_status(0);
             self.load_file(fpath);
+            self.frame.nr = 0; %used to indicate not processed yet
         end
         
         function start(self)
-            disp('Starting processing...');
+            global gui;
+            
             self.set_status(1);
             
-            %TODO: processing stuff
-            pause(1);
+            %Process frame-by-frame
+            clearvars self.frame;
+            self.frame.nr = 0;
+            while hasFrame(self.vid)
+                %Read next frame
+                self.frame.image     = readFrame(self.vid);
+                self.frame.nr        = self.frame.nr + 1;
+                self.frame.timestamp = self.vid.currentTime;
+                
+                %Pad and rotate input video frame
+                %paddedFrame = padarray(frame, [30 30], 0, 'both');
+                %rotatedImg  = imrotate(paddedFrame, 90, 'bilinear', 'crop');
+                
+                %Display frame
+                gui.show_video_frame();
+                
+            end
             
-            disp('Done processing.');
+            %TODO: processing stuff
+
             self.set_status(0);
         end
         
@@ -40,9 +61,17 @@ classdef processing_class < handle
         %Load file for processing. Error checking (file existance, etc.)
         % already done in gui_class.
         function load_file(self, fpath)
+            global gui;
+            
             self.file.path = fpath;
             
-            %TODO: load raw file in matlab, ready for processing
+            %Load file in matlab
+            self.vid = VideoReader(self.file.path);
+            
+            %Show first frame as preview
+            axes(gui.handle.axes_video);
+            %image(getdata(self.vid, 1));
+            %TODO
         end
         
         function set_status(self, value)
@@ -53,6 +82,12 @@ classdef processing_class < handle
             
             %Update gui
             gui.update_button_start(self.status);
+        end
+        
+        %Destructor
+        function delete(self)
+            %Close video file
+            %release(self.vid); %TODO
         end
         
     end

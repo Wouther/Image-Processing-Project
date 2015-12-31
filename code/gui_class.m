@@ -17,7 +17,12 @@ classdef gui_class < handle
 
             %Initialise
             set(self.handle.figure1, 'Name', 'License plate recognition GUI');
-            %set(gca, 'Visible', 'off'); %TODO: turn axis off for image display
+            
+            self.handle.axes_video.XTick = [];
+            self.handle.axes_video.YTick = [];
+            self.handle.axes_video.XColor = [1 1 1];
+            self.handle.axes_video.YColor = [1 1 1];
+            
             self.clean();
             
             %Clean exit when closing window
@@ -67,27 +72,36 @@ classdef gui_class < handle
         end
         
         %Start processing
-        %TODO: fix this function! It currently reloads all files when
-        % starting (silly when e.g. a new file that hasn't ran yet is loaded
-        % again for no reason), or at the wrong times... Somehow detect whether
-        % it has ran before and use that?
         function start(self)
             global processing;
             
             %(Re)load file
             if exist('processing', 'var')
-                if exist('processing.file', 'var') && ~isempty(processing.file.path)
-                    %If file already loaded, reload the current file (this also cleans up)
+                if processing.frame.nr ~= 0 %already ran
+                    %Reload the current file (this also cleans up)
                     fpath = processing.file.path;
                     self.load_file(fpath);
-                elseif exist('processing', 'var') && isempty(processing.results)
                 end
-            else %not ran yet
+            else
                 self.load_file();
             end
             
             %Start processing
             processing.start();
+        end
+        
+        %Shows the last frame in the GUI's video axes.
+        function show_video_frame(self)
+            global processing;
+            
+            axes(self.handle.axes_video);
+            image(processing.frame.image);
+            %set(gcf, 'position', [150 150 self.vid.Width self.vid.Height]);
+            %set(gca, 'units', 'pixels');
+            %set(gca, 'position', [0 0 self.vid.Width self.vid.Height]);
+
+            %showFrameOnAxis(gui.handle.axes_video, frame);
+            %TODO
         end
         
         %Cleans gui as preparation for new video file. Erases image,
