@@ -23,3 +23,11 @@ gui = gui_class();
 %Add all parent folders to path
 %Makes functions/classes accessible to scripts in folders.
 addpath('..', '-begin');
+
+
+%Automatically load a file (temporarily, for debugging)
+while ~exist('gui', 'var')
+    pause(0.1);
+end
+pause(1);
+gui.load_file('..\resources\Trainingsvideo.avi');
