@@ -92,10 +92,16 @@ classdef gui_class < handle
         
         %Shows the last frame in the GUI's video axes.
         function show_video_frame(self)
-            global processing;
+            global processing settings;
             
-            axes(self.handle.axes_video);
-            image(processing.frame.image);
+            if settings.show_processed_video
+                f = processing.frame.image_processed;
+            else
+                f = processing.frame.image;
+            end
+            
+            image(f, 'Parent', self.handle.axes_video);
+            self.handle.axes_video.Visible = 'off';
             %set(gcf, 'position', [150 150 self.vid.Width self.vid.Height]);
             %set(gca, 'units', 'pixels');
             %set(gca, 'position', [0 0 self.vid.Width self.vid.Height]);
