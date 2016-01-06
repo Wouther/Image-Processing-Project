@@ -20,10 +20,10 @@ global gui processing;
 %Initialise
 gui = gui_class();
 
-%Add all parent folders to path
+%Add subfolders and all parent folders to path
 %Makes functions/classes accessible to scripts in folders.
-addpath('..', '-begin');
-
+addpath('process_frame', '-begin');
+addpath('..',            '-begin');
 
 %Automatically load a file (temporarily, for debugging)
 while ~exist('gui', 'var')
