@@ -38,7 +38,7 @@ classdef processing_class < handle
                 self.frame.timestamp = self.vid.currentTime;
                 
                 %Process frame
-                [license_plate, self.frame.image_processed] = process_frame();
+                [license_plate, self.frame.image_processed] = process_frame(self.frame.image);
                 if ~isempty(license_plate)
                     self.add_result(license_plate, self.frame.nr, self.frame.timestamp);
                 end

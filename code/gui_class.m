@@ -34,29 +34,19 @@ classdef gui_class < handle
         function load_file(self, varargin)
             global processing;
             
-            %Select file
-            if nargin == 1 %no argument passed
-                [fname, ffolder] = uigetfile('../resources/*.avi');
-                if fname == false %dialogue was dismissed
-                    return;
-                end
-                fpath = [ffolder fname];
+            if nargin <= 1 %no argument passed
+                [accepted, fpath, is_video] = select_file();
             else
-                fpath = varargin{1};
+                [accepted, fpath, is_video] = select_file(varargin{1});
             end
             
-            %Check existance
-            if exist(fpath, 'file') ~= 2
-                fprintf('Error: file "%s" does not exist.\n', fpath);
+            if ~accepted
                 return;
             end
             
-            %Check if format supported
-            [~, fname, fext] = fileparts(fpath);
-            fext = fext(2:end); %remove leading period
-            supported_ext = VideoReader.getFileFormats();
-            if ~any(ismember({supported_ext.Extension}, fext))
-                fprintf('Error: VideoReader can''t read .%s files on this system.\n', fext);
+            %Check whether it's a video (not an image)
+            if ~is_video
+                fprintf('Error: File is an image, not video, so not supported by VideoReader.\n');
                 return;
             end
             
@@ -67,7 +57,8 @@ classdef gui_class < handle
             self.clean();
             
             % ...then load new file and update gui
-            self.update_textfield('text_file', [fname '.' fext]);
+            [~, fname, fext] = fileparts(fpath); %fext includes leading period
+            self.update_textfield('text_file', [fname fext]);
             processing = processing_class(fpath);
         end
         
