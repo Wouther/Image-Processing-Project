@@ -32,4 +32,4 @@ function [nummerborden] = nummerbordvinder(image)
     %num = nummerbordvinder(imread('test3.png'));  proc = dip_image(rgb2gray(num{1})); proc = opening(brmedgeobjs(~threshold(proc, 'Isodata', Inf)), 2)
     %nummerborden = 
     %nummerborden = r;
-    
+end
