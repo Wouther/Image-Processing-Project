@@ -1,4 +1,4 @@
-function l = lettermap(image,array,xormax)
+function l = lettermap2(image,array,xormax)
     y=size(array);
     y=y(2);
     character='E';

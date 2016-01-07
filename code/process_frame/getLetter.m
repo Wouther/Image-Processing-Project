@@ -2,7 +2,7 @@ function letter = getLetter( image )
     height=size(image,1);
     n=1;
     i=0;
-    p=0
+    p=0;
     while(n<size(image,2))
         if(sum(image(:,n))<height)
             i=i+1;
@@ -18,3 +18,4 @@ function letter = getLetter( image )
         end
     end
 end
+
