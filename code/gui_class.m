@@ -34,19 +34,29 @@ classdef gui_class < handle
         function load_file(self, varargin)
             global processing;
             
-            if nargin <= 1 %no argument passed
-                [accepted, fpath, is_video] = select_file();
+            %Select file
+            if nargin == 1 %no argument passed
+                [fname, ffolder] = uigetfile('../resources/*.avi');
+                if fname == false %dialogue was dismissed
+                    return;
+                end
+                fpath = [ffolder fname];
             else
-                [accepted, fpath, is_video] = select_file(varargin{1});
+                fpath = varargin{1};
             end
             
-            if ~accepted
+            %Check existance
+            if exist(fpath, 'file') ~= 2
+                fprintf('Error: file "%s" does not exist.\n', fpath);
                 return;
             end
             
-            %Check whether it's a video (not an image)
-            if ~is_video
-                fprintf('Error: File is an image, not video, so not supported by VideoReader.\n');
+            %Check if format supported
+            [~, fname, fext] = fileparts(fpath);
+            fext = fext(2:end); %remove leading period
+            supported_ext = VideoReader.getFileFormats();
+            if ~any(ismember({supported_ext.Extension}, fext))
+                fprintf('Error: VideoReader can''t read .%s files on this system.\n', fext);
                 return;
             end
             
@@ -57,8 +67,7 @@ classdef gui_class < handle
             self.clean();
             
             % ...then load new file and update gui
-            [~, fname, fext] = fileparts(fpath); %fext includes leading period
-            self.update_textfield('text_file', [fname fext]);
+            self.update_textfield('text_file', [fname '.' fext]);
             processing = processing_class(fpath);
         end
         
@@ -83,16 +92,10 @@ classdef gui_class < handle
         
         %Shows the last frame in the GUI's video axes.
         function show_video_frame(self)
-            global processing settings;
+            global processing;
             
-            if settings.show_processed_video
-                f = processing.frame.image_processed;
-            else
-                f = processing.frame.image;
-            end
-            
-            image(f, 'Parent', self.handle.axes_video);
-            self.handle.axes_video.Visible = 'off';
+            axes(self.handle.axes_video);
+            image(processing.frame.image);
             %set(gcf, 'position', [150 150 self.vid.Width self.vid.Height]);
             %set(gca, 'units', 'pixels');
             %set(gca, 'position', [0 0 self.vid.Width self.vid.Height]);

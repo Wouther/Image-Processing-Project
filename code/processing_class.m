@@ -1,6 +1,5 @@
 %Processes data and stores results, etc.
 %Uses gui object.
-%Uses process_frame.m
 classdef processing_class < handle
 
     properties
@@ -37,11 +36,9 @@ classdef processing_class < handle
                 self.frame.nr        = self.frame.nr + 1;
                 self.frame.timestamp = self.vid.currentTime;
                 
-                %Process frame
-                [license_plate, self.frame.image_processed] = process_frame(self.frame.image);
-                if ~isempty(license_plate)
-                    self.add_result(license_plate, self.frame.nr, self.frame.timestamp);
-                end
+                %Pad and rotate input video frame
+                %paddedFrame = padarray(frame, [30 30], 0, 'both');
+                %rotatedImg  = imrotate(paddedFrame, 90, 'bilinear', 'crop');
                 
                 %Display frame
                 gui.show_video_frame();
@@ -72,9 +69,9 @@ classdef processing_class < handle
             self.vid = VideoReader(self.file.path);
             
             %Show first frame as preview
-            %axes(gui.handle.axes_video);
-            %image(getdata(self.vid, 1), 'Parent', gui.handle.axes_video);
-            %TODO, use gui.show_video_frame()
+            axes(gui.handle.axes_video);
+            %image(getdata(self.vid, 1));
+            %TODO
         end
         
         function set_status(self, value)
