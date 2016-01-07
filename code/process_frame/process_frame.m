@@ -6,10 +6,19 @@ function [license_plate, processed_img] = process_frame(img)
     license_plate = []; %initialize, no license plate found
     
     %Find license plate in image
-    %img2 = nummerbordvinder(img)
+    plate_img = nummerbordvinder(img)
+    plate_img = plate_img{1}; %Temporary. TODO: add possibility to
+        % process multiple license plates
+    
+    %Convert to binary image
+    plate_img = dip_image(rgb2gray(plate_img));
+    plate_img = brmedgeobjs(~threshold(plate_img, 'Isodata', Inf));
+    plate_img = opening(plate_img, 2); %remove some noise
     
     %Perform character recognition on license plate image
-    %license_plate = ??? %TODO: how? Files added: getColor.m, getLetter.m and lettermap.m
+    global chardata; %Temporary. TODO: load it somewhere.
+    %load ../../resoures/chardata.mat; %Error incorrect path if done here?
+    license_plate = lettermap(plate_img, chardata, 1000);
     
-    processed_img = img; %temporarily as test
+    processed_img = plate_img; %temporarily as test
 end

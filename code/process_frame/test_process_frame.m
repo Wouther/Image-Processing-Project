@@ -5,6 +5,8 @@
 %Returns detected license plate as string, empty string if none detected.
 % Also returns (path to) the file processed.
 function [license_plate, fpath]  = test_process_frame(varargin)
+    addpath('..', '-begin'); %add parent folder to path
+    
     license_plate = []; %initialize, no license plate found
     
     %Select file

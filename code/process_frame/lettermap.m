@@ -1,5 +1,4 @@
-function l = lettermap(struct,array,xormax)
-    image=struct.image;
+function l = lettermap(image,array,xormax)
     y=size(array);
     y=y(2);
     character='E';
@@ -14,4 +13,4 @@ function l = lettermap(struct,array,xormax)
         end;
     end;
     l=character;
-end
+end 
