@@ -46,10 +46,11 @@ classdef processing_class < handle
                 %Display frame
                 gui.show_video_frame();
                 
-            end
-            
-            %TODO: processing stuff
 
+            [text,img]=process_frame(self.frame.image);
+            add_result(self,text,self.frame.nr,self.frame.timestamp);
+ 
+            end
             self.set_status(0);
         end
         
