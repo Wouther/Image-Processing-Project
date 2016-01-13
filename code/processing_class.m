@@ -45,12 +45,11 @@ classdef processing_class < handle
                 
                 %Display frame
                 gui.show_video_frame();
-                
-
-            [text,img]=process_frame(self.frame.image);
-            add_result(self,text,self.frame.nr,self.frame.timestamp);
- 
             end
+            
+            %TODO perhaps: processing stuff not specific to single frame
+            % (such as: error checking on consecutive license plates?)
+            
             self.set_status(0);
         end
         
