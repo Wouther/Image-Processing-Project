@@ -16,7 +16,7 @@ function [license_plate, processed_img] = process_frame(img)
     %Perform character recognition on license plate image
     tmp_img = label(plate_img);
     tmp_img = dip_array(tmp_img);
-    tmp_img = split(tmp_img);
+    tmp_img = splitletters(tmp_img);
     global chardata;
     for n = 1:size(tmp_img,2)
         license_plate(n) = lettermap(tmp_img(n).image, chardata, 1000);
