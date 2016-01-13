@@ -1,4 +1,4 @@
-function img =trimImage(image)
+function img = trimImageHorizontal(image)
     siz=size(image);
     offsetLeft=0;
     offsetRight=0;
