@@ -1,4 +1,4 @@
-function result=split(img)
+function result=splitletters(img)
     siz=size(img);
     n3=2;
     labels(1)=0;
