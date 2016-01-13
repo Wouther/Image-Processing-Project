@@ -1,7 +1,9 @@
-function l= letterMapWrapper(images,letters,numbers,minussign,forms,xormax)
+function l = letterMapWrapper(images, xormax)
+    global chardata;
+    
     siz=size(images);
     siz=siz(2);
-    siz2=size(forms);
+    siz2=size(chardata.forms);
     siz2=siz2(1);
     tmp=zeros(3,siz);
     errors=zeros(3,siz2);
@@ -11,24 +13,24 @@ function l= letterMapWrapper(images,letters,numbers,minussign,forms,xormax)
         return;
     end
     for(n=1:siz)
-        [tmp,tmp2]=lettermap(images(n).image,letters,xormax);
+        [tmp,tmp2]=lettermap(images(n).image,chardata.letters,xormax);
         errors(1,n)=tmp2;
         chars(1,n)=tmp;
     end;
     for(n=1:siz)
-        [tmp,tmp2]=lettermap(images(n).image,numbers,xormax);
+        [tmp,tmp2]=lettermap(images(n).image,chardata.numbers,xormax);
         errors(2,n)=tmp2;
         chars(2,n)=tmp;
     end;
     for(n=1:siz)
-        [tmp,tmp2]=lettermap(images(n).image,minussign,xormax);
+        [tmp,tmp2]=lettermap(images(n).image,chardata.minussign,xormax);
         errors(3,n)=tmp2;
         chars(3,n)=tmp;
     end;
     for(n=1:siz2)
         tmp(1)=0;
         for(n2=1:siz)
-            tmp(n2)=errors(forms(n,n2),n2);
+            tmp(n2)=errors(chardata.forms(n,n2),n2);
         end;
         sums(n)=sum(tmp);
     end;
@@ -42,7 +44,7 @@ function l= letterMapWrapper(images,letters,numbers,minussign,forms,xormax)
             result=n;
         end;
     end;
-    form=forms(result,:);
+    form=chardata.forms(result,:);
     for(n=1:siz)
         l(n)=chars(form(n),n);
     end;

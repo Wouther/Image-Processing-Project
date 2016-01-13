@@ -1,16 +1,18 @@
-function l= lettterMapWrapper(images,letters,numbers,minus,forms,xormax)
+function l = lettterMapWrapper(images, xormax)
+    global chardata;
+    
     siz=size(images);
-    siz2=size(forms);
+    siz2=size(chardata.forms);
     tmp=zeros(3,siz);
     errors=zeros(3,siz2);
     sums=zeros(1,siz2);
     for(n=1:siz)
-        [tmp,tmp2]=letterMap(images(n),letters,xormax);
+        [tmp,tmp2]=letterMap(images(n),chardata.letters,xormax);
         errors(1,n)=tmp2;
         chars(1,n)=tmp;
     end;
     for(n=1:siz)
-        [tmp,tmp2]=letterMap(images(n),numbers,xormax);
+        [tmp,tmp2]=letterMap(images(n),chardata.numbers,xormax);
         errors(2,n)=tmp2;
         chars(2,n)=tmp;
     end;
@@ -22,7 +24,7 @@ function l= lettterMapWrapper(images,letters,numbers,minus,forms,xormax)
     for(n=1:siz2)
         tmp(1)=0;
         for(n2=1:siz2)
-            tmp(n2)=errors(forms(n,n2),n2);
+            tmp(n2)=errors(chardata.forms(n,n2),n2);
         end;
         sum(n)=sum(tmp2);
     end;
@@ -34,7 +36,7 @@ function l= lettterMapWrapper(images,letters,numbers,minus,forms,xormax)
             result=n;
         end;
     end;
-    form=forms(result);
+    form=chardata.forms(result);
     for(n=1:siz)
         l(n)=chars(form(n),n);
     end;
