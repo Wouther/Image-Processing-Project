@@ -17,11 +17,12 @@ function [license_plate, processed_img] = process_frame(img)
     tmp_img = label(plate_img);
     tmp_img = dip_array(tmp_img);
     tmp_img = split(tmp_img);
-    load ../resources/charData.mat; %Error incorrect path if done here?
+    global chardata;
     for n = 1:size(tmp_img,2)
         license_plate(n) = lettermap(tmp_img(n).image, chardata, 1000);
     end;
     license_plate = char(license_plate);
+    license_plate = license_plate(1); %Temporary, single license plate for now
 
     processed_img = plate_img; %temporarily as test
 end
