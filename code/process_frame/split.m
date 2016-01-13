@@ -2,6 +2,7 @@ function result=split(img)
     siz=size(img);
     n3=2;
     labels(1)=0;
+    result(1)=struct('image',-1);
     for(n=1:siz(2))
         column=img(:,n);
         for(n2=1:siz(1))

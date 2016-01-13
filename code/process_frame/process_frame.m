@@ -6,7 +6,7 @@ function [license_plate, processed_img] = process_frame(img)
     license_plate = []; %initialize, no license plate found
     
     %Find license plate in image
-    plate_img = nummerbordvinder(img)
+    plate_img = nummerbordvinder(img);
     plate_img = plate_img{1}; %Temporary. TODO: add possibility to
         % process multiple license plates
     
@@ -19,11 +19,8 @@ function [license_plate, processed_img] = process_frame(img)
     tmp_img = label(plate_img);
     tmp_img = dip_array(tmp_img);
     tmp_img = split(tmp_img);
-    load ../resources/charData.mat; %Error incorrect path if done here?
-    for n = 1:size(tmp_img,2)
-        license_plate(n) = lettermap(tmp_img(n).image, chardata, 1000);
-    end;
-    license_plate = char(license_plate);
+    load ../resources/data.mat; %Error incorrect path if done here?
+    license_plate = letterMapWrapper(tmp_img,letters,numbers,minussign,forms,100000)
     
     processed_img = plate_img; %temporarily as test
 end

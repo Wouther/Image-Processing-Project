@@ -1,4 +1,4 @@
-function l = lettermap(image,array,xormax)
+function [l,e] = lettermap(image,array,xormax)
     y=size(array);
     y=y(2);
     character='E';
@@ -13,4 +13,5 @@ function l = lettermap(image,array,xormax)
         end;
     end;
     l=character;
+    e=max;
 end
