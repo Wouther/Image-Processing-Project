@@ -18,7 +18,7 @@ function [license_plate, processed_img] = process_frame(img)
     tmp_img = dip_array(tmp_img);
 
     tmp_img = splitletters(tmp_img);
-    global letters, numbers, minussign;
+    global letters numbers minussign forms;
     license_plate = letterMapWrapper(tmp_img,letters,numbers,minussign,forms,100000)
 
 
