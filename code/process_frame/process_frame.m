@@ -17,9 +17,7 @@ function [license_plate, processed_img] = process_frame(img)
     tmp_img = label(plate_img);
     tmp_img = dip_array(tmp_img);
     tmp_img = splitletters(tmp_img);
-    global chardata;
-    license_plate = letterMapWrapper(tmp_img, ...
-        chardata.letters, chardata.numbers, chardata.minussign, chardata. forms, 100000);
+    license_plate = letterMapWrapper(tmp_img, 100000);
     
     processed_img = plate_img; %temporarily as test
 end
