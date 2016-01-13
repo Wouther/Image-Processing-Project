@@ -7,8 +7,8 @@ addpath('..',            '-begin');
 
 %% Load data for character recognition
 disp('Loading data for character recognition...');
-global letters numbers minussign forms;
-load('..\resources\data.mat');
+global chardata;
+load('..\resources\chardata.mat');
 
 %% Initialize DIPimage for use in test_process_frame()
 disp('Initializing DIPimage...');
