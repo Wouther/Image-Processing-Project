@@ -12,7 +12,7 @@ load('..\resources\chardata.mat');
 
 %% Initialize DIPimage for use in test_process_frame()
 disp('Initializing DIPimage...');
-dip_initialise;
+run('C:\Program Files\DIPimage 2.7\dipstart.m');
 
 
 disp('Done.');
