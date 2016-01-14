@@ -1,3 +1,5 @@
+%Used for reading data from known images, not used for character
+%recognition
 function letter = getLetter( image )
     height=size(image,1);
     n=1;

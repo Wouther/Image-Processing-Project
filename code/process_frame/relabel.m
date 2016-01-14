@@ -1,3 +1,4 @@
+%Makes sure labels are in horizontal order.
 function result=relabel(img)
     size=size(img);
     n3=2;

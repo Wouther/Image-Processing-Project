@@ -1,11 +1,15 @@
+%Bad named file, use letterMapWrapper instead, (just 1 t).
 function l = lettterMapWrapper(images, xormax)
     global chardata;
     
     siz=size(images);
     siz2=size(chardata.forms);
+    
     tmp=zeros(3,siz);
+    
     errors=zeros(3,siz2);
     sums=zeros(1,siz2);
+    
     for(n=1:siz)
         [tmp,tmp2]=letterMap(images(n),chardata.letters,xormax);
         errors(1,n)=tmp2;
