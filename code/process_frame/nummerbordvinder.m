@@ -24,7 +24,7 @@ function [nummerborden] = nummerbordvinder(image)
         r = imrotate(r, angle * df);
         point = point + [size(r, 2) size(r, 1)]/2;
         r = imcrop(r, [point(1) - msr(i).DimensionsCube(1)/2, point(2) - msr(i).DimensionsCube(2)/2,  msr(i).DimensionsCube(1),  msr(i).DimensionsCube(2)]);
-        nummerborden{i} = r;
+        nummerborden{i} = imresize(r, [38 174]);
     end
     % To get a binary image:
     % num = nummerbordvinder(img); proc = dip_image(rgb2gray(num{1})); proc = brmedgeobjs(~threshold(proc, 'Isodata', Inf));
@@ -32,4 +32,4 @@ function [nummerborden] = nummerbordvinder(image)
     %num = nummerbordvinder(imread('test3.png'));  proc = dip_image(rgb2gray(num{1})); proc = opening(brmedgeobjs(~threshold(proc, 'Isodata', Inf)), 2)
     %nummerborden = 
     %nummerborden = r;
-end
+    
