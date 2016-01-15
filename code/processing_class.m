@@ -64,7 +64,6 @@ classdef processing_class < handle
                 %n/o characters different per frame
                 %matching frame numbers: cell2mat(unproc(2:end,2))
             delta_plate = find(delta_char > 3) + 1; %indices of significantly different license plates
-%            delta_plate = cell2mat(unproc(find(delta_char > 3) + 1, 2)); %frame number of significantly different license plates
             %TODO: perhaps combine with information about location of license plate?
             
             %Show graph (temporary, for debugging)
@@ -94,9 +93,6 @@ classdef processing_class < handle
                 
                 %Calculate most probable result
                 proc_plate = [];
-                %TODO: account for plates of different length (n/o chars)
-                % single outlier that's LONGER will probably result in
-                % extra space at end
                 for j = 1:size(pl,2) %loop through character positions
                     [chars,~,chars_occ] = unique(pl(:,j));
                     P = zeros(size(chars));
@@ -104,7 +100,10 @@ classdef processing_class < handle
                         P(k) = numel(find(chars_occ == k)); %chance (occurences) of characters on this position
                     end
                     [~,kmax] = max(P);
-                    proc_plate(j) = chars(kmax);
+                    
+                    if chars(kmax) ~= ' ' %ignore spaces (occur when incorrect too long plate)
+                        proc_plate(end+1) = chars(kmax); %store most probably character
+                    end
                 end
                 proc(end,1) = {char(proc_plate)};
             end
