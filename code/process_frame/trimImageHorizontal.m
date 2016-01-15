@@ -1,3 +1,5 @@
+%Trims away all empty columns on the left and right side of an image.
+%Note that a column is empty, when all pixels are 1, instead of zero.
 function img = trimImageHorizontal(image)
     siz=size(image);
     offsetLeft=0;

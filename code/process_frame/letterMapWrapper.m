@@ -1,6 +1,9 @@
+% Considers all nummerbord-formats and picks the most likely(least amount of
+% xor errors). returns 'e' for nummerbords with incorrect length in
+% symbols.
+
 function l = letterMapWrapper(images, xormax)
     global chardata;
-    
     siz=size(images);
     siz=siz(2);
     siz2=size(chardata.forms);

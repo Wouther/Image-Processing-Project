@@ -1,3 +1,5 @@
+%Checks an image and performs character recognition based on sum of xor
+%errors. It only checks against the characters in the array argument.
 function [l,e] = lettermap(image,array,xormax)
     y=size(array);
     y=y(2);
