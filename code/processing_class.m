@@ -7,6 +7,7 @@ classdef processing_class < handle
         status; %0 if not processing
         file; %File being processed. Structure with field 'path'.
         results; %Cell array with rows {'license plate', frame nr, timestamp}
+        results_raw; %like 'results', but without post-processing
         vid; %VideoReader object of loaded file
         frame; %Last video frame processed. Structure with fields 'image',
         % 'nr' and 'timestamp'
@@ -18,6 +19,7 @@ classdef processing_class < handle
         function self = processing_class(fpath)
             %Initialise
             self.results = {};
+            self.results_raw = {};
             self.set_status(0);
             self.load_file(fpath);
             self.frame.nr = 0; %used to indicate not processed yet
@@ -48,7 +50,8 @@ classdef processing_class < handle
             end
             
             %Post-process data
-            self.results = post_process(self.results);
+            self.results_raw = self.results;
+            self.results     = self.post_process(self.results);
             gui.update_table_results();
     
             self.set_status(0);
