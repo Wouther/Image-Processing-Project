@@ -14,7 +14,7 @@ function result=splitletters(img)
                 labels(n3)=column(n2);
                 %splilt all pixels with this label in a seperate image with
                 %horizontal trimming.
-                result(n3-1)=struct('image',trimImageHorizontal(not(img==labels(n3))));
+                result(n3-1)=struct('image',trimImage(not(img==labels(n3))));
                 n3=n3+1;
             end
         end

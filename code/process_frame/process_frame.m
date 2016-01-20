@@ -1,5 +1,6 @@
 %Processes a single video frame
-%Frame image passed as argument.
+%Frame image passed as argument
+
 %Returns detected license plate as string, empty string if none detected.
 %Also returns a processed version of the frame (image) for display / debugging.
 function [license_plate, processed_img] = process_frame(img)
@@ -7,6 +8,11 @@ function [license_plate, processed_img] = process_frame(img)
 
     %Find license plate in image
     plate_img = nummerbordvinder(img);
+    if(size(plate_img)<1)
+        license_plate='e';
+        plate_img=0;
+        return;
+    end;
     plate_img = plate_img{1}; %Temporary. TODO: add possibility to
         % process multiple license plates
 
