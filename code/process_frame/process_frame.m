@@ -10,7 +10,7 @@ function [license_plate, processed_img] = process_frame(img)
     plate_img = nummerbordvinder(img);
     if(isempty(plate_img))
         license_plate='e';
-        plate_img=0;
+        processed_img=0;
         return;
     end;
     plate_img = plate_img{1}; %Temporary. TODO: add possibility to
