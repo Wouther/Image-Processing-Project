@@ -59,6 +59,6 @@ function [license_plate, fpath]  = test_process_frame(varargin)
     
     %Show processed frame
     ax = axes();
-    image(frame.image_processed, 'Parent', ax);
+    image(frame.image, 'Parent', ax);
     ax.Visible = 'Off';
 end
