@@ -9,7 +9,7 @@ function result=splitletters(img)
         column=img(:,n);
         for(n2=1:siz(1))
             %If the current label is not yet used...
-            if(not(ismember(labels(:),column(n2))))
+            if(not(any(column(n2)==labels)))
                 %add the current label
                 labels(n3)=column(n2);
                 %splilt all pixels with this label in a seperate image with
