@@ -26,7 +26,7 @@ classdef processing_class < handle
         end
         
         function start(self)
-            global gui;
+            global gui settings;
             
             self.set_status(1);
             
@@ -53,8 +53,11 @@ classdef processing_class < handle
             self.results_raw = self.results;
             self.results     = self.post_process(self.results);
             gui.update_table_results();
-    
+            
             self.set_status(0);
+            
+            %Compare results with solution
+            checkSolution(self.results, settings.solution_file)
         end
         
         %Post-processing of data (e.g. error checking)
