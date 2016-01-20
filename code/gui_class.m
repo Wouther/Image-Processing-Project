@@ -81,6 +81,13 @@ classdef gui_class < handle
             processing.start();
         end
         
+        %Stop processing after this frame
+        function stop(self)
+            global processing;
+            
+            processing.interrupt();
+        end
+        
         %Shows the last frame in the GUI's video axes.
         function show_video_frame(self)
             global processing settings;
@@ -122,12 +129,14 @@ classdef gui_class < handle
         end
         
         %Disables the start button if currently processing, enables
-        % otherwise. First argument is processing status.
+        % otherwise. Vice versa for stop button. First argument is processing status.
         function update_button_start(self, status)
             if status == 0 %not currently processing
                 set(self.handle.button_start, 'Enable', 'on');
+                set(self.handle.button_stop,  'Enable', 'off');
             else %currently processing already
                 set(self.handle.button_start, 'Enable', 'off');
+                set(self.handle.button_stop,  'Enable', 'on');
             end
         end
         
