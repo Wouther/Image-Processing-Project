@@ -8,7 +8,7 @@ function [license_plate, processed_img] = process_frame(img)
 
     %Find license plate in image
     plate_img = nummerbordvinder(img);
-    if(size(plate_img)<1)
+    if(isempty(plate_img))
         license_plate='e';
         plate_img=0;
         return;
