@@ -6,8 +6,6 @@ global settings;
 
 %Settings
 settings.show_processed_video = false; %Show processed video instead of raw file
-settings.solution_file = '../resources/trainingSolutions.mat'; %File with
-    % solutions to compare results with
 
 %Handle unclean exit from last run or when gui still open
 if exist('gui', 'var') && ~isempty(gui.fig)

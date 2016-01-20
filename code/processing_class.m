@@ -66,9 +66,6 @@ classdef processing_class < handle
             gui.update_table_results();
             
             self.set_status(0);
-            
-            %Compare results with solution
-            checkSolution(self.results, settings.solution_file)
         end
         
         %Post-processing of data (e.g. error checking)
@@ -162,7 +159,7 @@ classdef processing_class < handle
             self.status = value;
             
             %Update gui
-            gui.update_button_start(self.status);
+            gui.update_buttons(self.status);
         end
         
         %Destructor

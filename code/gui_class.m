@@ -108,6 +108,26 @@ classdef gui_class < handle
             %TODO
         end
         
+        %Checks the results from processing against a file with solutions.
+        function check_results(self)
+            global processing;
+            
+            %Select solution file
+            [fname, ffolder] = uigetfile('../resources/*.mat');
+            if fname == false %dialogue was dismissed
+                return;
+            end
+            fpath = [ffolder fname];
+
+            if exist(fpath, 'file') ~= 2
+                fprintf('Error: file "%s" does not exist.\n', fpath);
+                return;
+            end
+            
+            %Compare results with solution
+            checkSolution(processing.results, fpath)
+        end
+        
         %Cleans gui as preparation for new video file. Erases image,
         % deletes results in table, etc.
         function clean(self)
@@ -128,15 +148,25 @@ classdef gui_class < handle
             set(h, 'String', text);
         end
         
-        %Disables the start button if currently processing, enables
-        % otherwise. Vice versa for stop button. First argument is processing status.
-        function update_button_start(self, status)
+        %Enables/diables the buttons to match the current processing status.
+        % First argument is processing status.
+        function update_buttons(self, status)
+            global processing;
+            
             if status == 0 %not currently processing
                 set(self.handle.button_start, 'Enable', 'on');
                 set(self.handle.button_stop,  'Enable', 'off');
+                if exist('processing', 'var')
+                    if ~empty(processing.results)
+                        set(self.handle.button_check_results, 'Enable', 'on');
+                    else
+                        set(self.handle.button_check_results, 'Enable', 'off');
+                    end
+                end
             else %currently processing already
                 set(self.handle.button_start, 'Enable', 'off');
                 set(self.handle.button_stop,  'Enable', 'on');
+                set(self.handle.button_check_results, 'Enable', 'off');
             end
         end
         
