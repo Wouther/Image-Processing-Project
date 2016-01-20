@@ -44,8 +44,6 @@ function l = letterMapWrapper(img, xormax)
     max=1000000;
     result=0;
     for(n=1:siz2)
-        sums(n)
-        n
         if(sums(n)<max)
             max=sums(n);
             result=n;
