@@ -8,8 +8,8 @@ addpath('..',            '-begin');
 %% Load data for character recognition
 disp('Loading data for character recognition...');
 global chardata;
-load('..\resources\chardata.mat');
-
+load('..\resources\chardata2.mat');
+chardata=chardata2;
 %% Initialize DIPimage for use in test_process_frame()
 disp('Initializing DIPimage...');
 run('C:\Program Files\DIPimage 2.7\dipstart.m');
