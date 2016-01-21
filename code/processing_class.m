@@ -32,20 +32,16 @@ classdef processing_class < handle
             
             self.do_interrupt = false;
             self.set_status(1);
+            t_start = tic;
             
             %Process frame-by-frame
             clearvars self.frame;
-            self.frame.nr = 0;
+            self.frame.nr = 1;
             while ~self.do_interrupt && hasFrame(self.vid)
                 %Read next frame
                 self.frame.image     = readFrame(self.vid);
-                self.frame.nr        = self.frame.nr + 1;
                 self.frame.timestamp = self.vid.currentTime;
-
-                %Check if frame is to be skipped
-                if rem(self.frame.nr - 1, settings.frame_divider) ~= 0
-                    continue;
-                end
+                self.frame.nr        = uint32(self.frame.timestamp * self.vid.FrameRate);
                 
                 %Process frame
                 [license_plate, self.frame.image_processed] = process_frame(self.frame.image);
@@ -58,6 +54,17 @@ classdef processing_class < handle
                 %Note: if this line is removed, replace it with 'drawnow' to
                 % not break the interrupt functionality. It flushes Matlab's
                 % callback queue to process any possible interrupts.
+                
+                
+                %Determine next frame number (accounting for processing time)
+                dt = toc(t_start) / (1+settings.max_time/100) - self.vid.CurrentTime;
+                dt = min(dt, settings.min_frames/self.vid.FrameRate);
+                dt = max(dt, 1/self.vid.FrameRate); %at least one frame
+                t_new = self.frame.timestamp + dt;
+                if t_new > self.vid.Duration
+                    break;
+                end
+                self.vid.CurrentTime = t_new;
             end
             
             if self.do_interrupt
@@ -70,10 +77,15 @@ classdef processing_class < handle
             self.results     = self.post_process(self.results);
             gui.update_table_results();
             
+            t_end = toc(t_start) - dt;
             self.set_status(0);
             
             %Compare results with solution
             checkSolution(self.results, settings.solution_file)
+            
+            %Show processing duration
+            disp(['Processing took ' num2str(t_end) ' seconds, which is ' ...
+                num2str(100*t_end/self.vid.Duration) '% of the video''s duration.']);
         end
         
         %Post-processing of data (e.g. error checking)

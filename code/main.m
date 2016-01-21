@@ -8,8 +8,9 @@ global settings;
 settings.show_processed_video = false; %Show processed video instead of raw file
 settings.solution_file = '../resources/trainingSolutions.mat'; %File with
     % solutions to compare results with
-settings.frame_divider = 5; %Only process every one in <this number> frames,
-    % skip the rest. Set to 1 to process all frames.
+settings.min_frames = 10; %At least process every one in <this number> frames
+settings.max_time   = 30; %Maximum allowed processing time compared to video
+    % duration (i.e. <this number> percent longer).
 
 %Handle unclean exit from last run or when gui still open
 if exist('gui', 'var') && ~isempty(gui.fig)
