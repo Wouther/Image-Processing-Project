@@ -22,7 +22,7 @@ function varargout = gui_figure(varargin)
 
 % Edit the above text to modify the response to help gui_figure
 
-% Last Modified by GUIDE v2.5 16-Dec-2015 13:57:32
+% Last Modified by GUIDE v2.5 20-Jan-2016 21:46:47
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -85,4 +85,13 @@ function button_start_Callback(hObject, eventdata, handles)
     global gui;
     
     gui.start();
+
+
+% --- Executes on button press in button_stop.
+function button_stop_Callback(hObject, eventdata, handles)
+% hObject    handle to button_stop (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global gui;
     
+    gui.stop();

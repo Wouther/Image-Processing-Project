@@ -5,6 +5,7 @@ classdef processing_class < handle
 
     properties
         status; %0 if not processing
+        do_interrupt; %stops proccesing after next frame if set to true
         file; %File being processed. Structure with field 'path'.
         results; %Cell array with rows {'license plate', frame nr, timestamp}
         results_raw; %like 'results', but without post-processing
@@ -19,6 +20,7 @@ classdef processing_class < handle
         function self = processing_class(fpath)
             %Initialise
             self.results = {};
+            self.do_interrupt = false;
             self.results_raw = {};
             self.set_status(0);
             self.load_file(fpath);
@@ -26,14 +28,15 @@ classdef processing_class < handle
         end
         
         function start(self)
-            global gui;
+            global gui settings;
             
+            self.do_interrupt = false;
             self.set_status(1);
             
             %Process frame-by-frame
             clearvars self.frame;
             self.frame.nr = 0;
-            while hasFrame(self.vid)
+            while ~self.do_interrupt && hasFrame(self.vid)
                 %Read next frame
                 self.frame.image     = readFrame(self.vid);
                 self.frame.nr        = self.frame.nr + 1;
@@ -47,14 +50,25 @@ classdef processing_class < handle
                 
                 %Display frame
                 gui.show_video_frame();
+                %Note: if this line is removed, replace it with 'drawnow' to
+                % not break the interrupt functionality. It flushes Matlab's
+                % callback queue to process any possible interrupts.
+            end
+            
+            if self.do_interrupt
+                disp(['Note: processing was interrupted, so the results might' ...
+                    ' be only partial.']);
             end
             
             %Post-process data
             self.results_raw = self.results;
             self.results     = self.post_process(self.results);
             gui.update_table_results();
-    
+            
             self.set_status(0);
+            
+            %Compare results with solution
+            checkSolution(self.results, settings.solution_file)
         end
         
         %Post-processing of data (e.g. error checking)
@@ -110,6 +124,11 @@ classdef processing_class < handle
                 end
                 proc(end,1) = {char(proc_plate)};
             end
+        end
+        
+        %Interrupts processing: stops after this frame
+        function interrupt(self)
+            self.do_interrupt = true;
         end
         
         %Add a new result to the table
