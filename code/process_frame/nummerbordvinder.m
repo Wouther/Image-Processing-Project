@@ -11,7 +11,7 @@ function [nummerborden] = nummerbordvinder(image)
     mskd = bopening(mskd, 3, -1, 0);
     mskd = bpropagation(mskd, rmskd, Inf, 2, 0);
     %mskd = bopening(mskd, 3, -1, 0);
-    %mskd = bclosing(mskd, 15, -1, 0);
+    mskd = bclosing(mskd, 1, -1, 0);
 
     %%
     mskd = label(mskd, 2, 150, 0);

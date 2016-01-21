@@ -12,11 +12,11 @@ function [BW] = createMask(HSV)
 I = HSV;
 
 % Define thresholds for channel 1 based on histogram settings
-channel1Min = 0.017;
-channel1Max = 0.179;
+channel1Min = 0.035;
+channel1Max = 0.174;
 
 % Define thresholds for channel 2 based on histogram settings
-channel2Min = 0.373;
+channel2Min = 0.348;
 channel2Max = 1.000;
 
 % Define thresholds for channel 3 based on histogram settings
