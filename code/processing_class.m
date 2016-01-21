@@ -60,7 +60,11 @@ classdef processing_class < handle
                 dt = toc(t_start) / (1+settings.max_time/100) - self.vid.CurrentTime;
                 dt = min(dt, settings.min_frames/self.vid.FrameRate);
                 dt = max(dt, 1/self.vid.FrameRate); %at least one frame
-                t_new = self.frame.timestamp + dt;
+                t_new = self.frame.timestamp + dt - 0.5/self.vid.FrameRate;
+                    %Subtract half a frame, because readFrame() reads the *next*
+                    % frame after CurrentTime. Half instead of one to avoid
+                    % edge cases.
+                
                 if t_new > self.vid.Duration
                     break;
                 end
