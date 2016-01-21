@@ -12,6 +12,7 @@ classdef processing_class < handle
         vid; %VideoReader object of loaded file
         frame; %Last video frame processed. Structure with fields 'image',
         % 'nr' and 'timestamp'
+        exceptions; %Frames that caused exceptions in the last run
     end
     
     methods
@@ -25,12 +26,14 @@ classdef processing_class < handle
             self.set_status(0);
             self.load_file(fpath);
             self.frame.nr = 0; %used to indicate not processed yet
+            self.exceptions = [];
         end
         
         function start(self)
             global gui settings;
             
             self.do_interrupt = false;
+            self.exceptions = [];
             self.set_status(1);
             t_start = tic;
             
@@ -43,18 +46,21 @@ classdef processing_class < handle
                 self.frame.timestamp = self.vid.currentTime;
                 self.frame.nr        = uint32(self.frame.timestamp * self.vid.FrameRate);
                 
-                %Process frame
-                [license_plate, self.frame.image_processed] = process_frame(self.frame.image);
-                if ~isempty(license_plate)
-                    self.add_result(license_plate, self.frame.nr, self.frame.timestamp);
+                try %Do not let failures stop the entire thing
+                    %Process frame
+                    [license_plate, self.frame.image_processed] = process_frame(self.frame.image);
+                    if ~isempty(license_plate)
+                        self.add_result(license_plate, self.frame.nr, self.frame.timestamp);
+                    end
+                    
+                    %Display frame
+                    gui.show_video_frame();
+                    %Note: if this line is removed, replace it with 'drawnow' to
+                    % not break the interrupt functionality. It flushes Matlab's
+                    % callback queue to process any possible interrupts.
+                catch EX
+                    self.exceptions(end+1) = self.frame; %Store frame that caused exception
                 end
-                
-                %Display frame
-                gui.show_video_frame();
-                %Note: if this line is removed, replace it with 'drawnow' to
-                % not break the interrupt functionality. It flushes Matlab's
-                % callback queue to process any possible interrupts.
-                
                 
                 %Determine next frame number (accounting for processing time)
                 dt = toc(t_start) / (1+settings.max_time/100) - self.vid.CurrentTime;
@@ -90,6 +96,7 @@ classdef processing_class < handle
             %Show processing duration
             disp(['Processing took ' num2str(t_end) ' seconds, which is ' ...
                 num2str(100*t_end/self.vid.Duration) '% of the video''s duration.']);
+            disp([int2str(numel(self.exceptions)) ' exceptions were caught.']);
         end
         
         %Post-processing of data (e.g. error checking)

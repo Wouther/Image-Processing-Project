@@ -5,7 +5,7 @@
 %Also returns a processed version of the frame (image) for display / debugging.
 function [license_plate, processed_img] = process_frame(img)
     license_plate = []; %initialize, no license plate found
-
+    
     %Find license plate in image
     plate_img = nummerbordvinder(img);
     if(isempty(plate_img))
