@@ -5,7 +5,7 @@
 %Also returns a processed version of the frame (image) for display / debugging.
 function [license_plate, processed_img] = process_frame(img)
     license_plate = []; %initialize, no license plate found
-
+    try % Do not let failures stop the entire thing.
     %Find license plate in image
     plate_img = nummerbordvinder(img);
     if(isempty(plate_img))
@@ -24,6 +24,7 @@ function [license_plate, processed_img] = process_frame(img)
     tmp_img = dip_array(tmp_img);
     tmp_img = splitletters(tmp_img);
     license_plate = letterMapWrapper(tmp_img, 100000);
-    
+    catch EX 
+    end
     processed_img = plate_img; %temporarily as test
 end
