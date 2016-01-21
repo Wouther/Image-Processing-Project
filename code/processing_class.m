@@ -37,16 +37,15 @@ classdef processing_class < handle
             clearvars self.frame;
             self.frame.nr = 0;
             while ~self.do_interrupt && hasFrame(self.vid)
-                self.frame.nr = self.frame.nr + 1;
-                
+                %Read next frame
+                self.frame.image     = readFrame(self.vid);
+                self.frame.nr        = self.frame.nr + 1;
+                self.frame.timestamp = self.vid.currentTime;
+
                 %Check if frame is to be skipped
                 if rem(self.frame.nr - 1, settings.frame_divider) ~= 0
                     continue;
                 end
-                
-                %Read next frame
-                self.frame.image     = readFrame(self.vid);
-                self.frame.timestamp = self.vid.currentTime;
                 
                 %Process frame
                 [license_plate, self.frame.image_processed] = process_frame(self.frame.image);
