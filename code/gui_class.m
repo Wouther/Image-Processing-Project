@@ -112,6 +112,7 @@ classdef gui_class < handle
         % deletes results in table, etc.
         function clean(self)
             self.handle.table_results.Data = {}; %empty table
+            self.update_progressbar(0);
             set(self.handle.button_start, 'Enable', 'off'); %disable start button
             %TODO: clean the rest
         end
@@ -138,6 +139,19 @@ classdef gui_class < handle
                 set(self.handle.button_start, 'Enable', 'off');
                 set(self.handle.button_stop,  'Enable', 'on');
             end
+        end
+        
+        %Update the progress bar.
+        function update_progressbar(self, fraction)
+            ax = self.handle.axes_progress;
+            barh(ax, 0, fraction, 1, 'g');
+            
+            %TODO: why does this have to be set every time?
+            set(ax, 'XLim', [0 1]);
+            set(ax, 'XTick', []);
+            set(ax, 'YTick', []);
+            set(ax, 'XTickLabel', []);
+            set(ax, 'YTickLabel', []);
         end
         
         function exit(self)
