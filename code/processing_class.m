@@ -35,7 +35,7 @@ classdef processing_class < handle
             self.do_interrupt = false;
             self.exceptions = [];
             self.set_status(1);
-            gui.update_progressbar(0);
+            gui.update_progressbar(0, 'Starting...');
             t_start = tic;
             
             %Process frame-by-frame
@@ -63,7 +63,7 @@ classdef processing_class < handle
                     self.exceptions(end+1) = self.frame; %Store frame that caused exception
                 end
                 
-                gui.update_progressbar(self.frame.timestamp / self.vid.Duration);
+                gui.update_progressbar(self.frame.timestamp / self.vid.Duration, license_plate);
                 
                 %Determine next frame number (accounting for processing time)
                 dt = toc(t_start) / (1+settings.max_time/100) - self.vid.CurrentTime;
@@ -91,7 +91,7 @@ classdef processing_class < handle
             gui.update_table_results();
             
             t_end = toc(t_start) - dt;
-            gui.update_progressbar(1);
+            gui.update_progressbar(1, 'Done');
             self.set_status(0);
             
             %Compare results with solution
