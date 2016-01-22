@@ -6,7 +6,7 @@ global settings;
 
 %Settings
 settings.show_processed_video = false; %Show processed video instead of raw file
-settings.auto_load_file = '..\resources\Trainingsvideo.avi'; %Automatically load
+settings.auto_load_file = ''; %Automatically load
     % this file when the GUI is started. Useful for e.g. faster debugging.
     % Leave empty to disable auto-loading.
 settings.solution_file = '../resources/trainingSolutions.mat'; %File with
